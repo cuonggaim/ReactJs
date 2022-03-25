@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import './UserManage.scss';
 import {getAllUsers} from '../../services/userService';
+import ModalUser from './ModalUser';
 
 class UserManage extends Component {
 
@@ -10,6 +11,7 @@ class UserManage extends Component {
         super(props);
         this.state = {
             arrUsers: [],
+            isOpenModalUsers: false,
         }
     }
 
@@ -21,6 +23,19 @@ class UserManage extends Component {
             })
         }
     }
+
+    handleAddNewUser = () => {
+        this.setState({
+            isOpenModalUsers: true,
+        })
+    }
+
+    toggleUsersModal = () => {
+        this.setState({
+            isOpenModalUsers: !this.state.isOpenModalUsers,
+        })
+    }
+
     //Life cycle
     //Run component: 
     //1. Run construct -> init state
@@ -31,7 +46,17 @@ class UserManage extends Component {
         let arrUsers = this.state.arrUsers;
         return (
             <div className="users-container">
+                <ModalUser
+                    isOpen={this.state.isOpenModalUsers}
+                    toggleFromParent={this.toggleUsersModal}
+                />
                 <div className="title text-center">Manage users with cuonggaim</div>
+                <div className="mx-1">
+                    <button 
+                        className="btn btn-primary px-3"
+                        onClick={()=>this.handleAddNewUser()}
+                    ><i className="fas fa-plus"></i>Add new user</button>
+                </div>
                 <div className="users-table mt-3 mx-1">
                     <table id="customers">
                         <tr>
@@ -45,7 +70,6 @@ class UserManage extends Component {
                         
                             {
                                 arrUsers && arrUsers.map((item, index) => {
-                                    console.log(`CuongGaim check map`, item, index);
                                     return (
                                     <tr key={index}>
                                         <td>{item.email}</td>
