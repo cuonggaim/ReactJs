@@ -1,0 +1,27 @@
+#TableManageUser {
+    font-family: Arial, sans-serif, Helvetica;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#TableManageUser td,
+#TableManageUser th {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+#TableManageUser tr:nth-child(even) {
+    background-color: #f3f2f1;
+}
+
+#TableManageUser tr:hover {
+    background-color: #f3f2f1;
+}
+
+#TableManageUser th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #04aa04;
+    color: white;
+}
