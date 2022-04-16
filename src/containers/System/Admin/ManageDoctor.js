@@ -27,12 +27,20 @@ class ManageDoctor extends React.Component {
             listPrice: [],
             listPayment: [],
             listProvince: [],
+            listSpecialty: [],
+            listClinic: [],
+
             selectedPrice: "",
             selectedPayment: "",
             selectedProvince: "",
+            selectedSpecialty: "",
+            selectedClinic: "",
+
             nameClinic: "",
             addressClinic: "",
             note: "",
+            clinicId: "",
+            specialtyId: "",
         };
     }
 
@@ -78,6 +86,14 @@ class ManageDoctor extends React.Component {
                     result.push(object);
                 });
             }
+            if (type === "SPECIALTY") {
+                inputData.map((item, index) => {
+                    let object = {};
+                    object.label = item.name;
+                    object.value = item.id;
+                    result.push(object);
+                });
+            }
         }
         return result;
     };
@@ -95,7 +111,7 @@ class ManageDoctor extends React.Component {
         if (
             prevProps.allRequiredDoctorInfo !== this.props.allRequiredDoctorInfo
         ) {
-            let { resPayment, resPrice, resProvince } =
+            let { resPayment, resPrice, resProvince, resSpecialty } =
                 this.props.allRequiredDoctorInfo;
 
             let dataSelectPrice = this.buildDataInputSelect(resPrice, "PRICE");
@@ -107,11 +123,16 @@ class ManageDoctor extends React.Component {
                 resProvince,
                 "PROVINCE"
             );
+            let dataSelectSpecialty = this.buildDataInputSelect(
+                resSpecialty,
+                "SPECIALTY"
+            );
 
             this.setState({
                 listPrice: dataSelectPrice,
                 listPayment: dataSelectPayment,
                 listProvince: dataSelectProvince,
+                listSpecialty: dataSelectSpecialty,
             });
         }
         if (prevProps.language !== this.props.language) {
@@ -162,6 +183,11 @@ class ManageDoctor extends React.Component {
             nameClinic: this.state.nameClinic,
             addressClinic: this.state.addressClinic,
             note: this.state.note,
+            clinicId:
+                this.state.selectedClinic && this.state.selectedClinic.value
+                    ? this.state.selectedClinic.value
+                    : "",
+            specialtyId: this.state.selectedSpecialty.value,
         });
     };
 
@@ -355,9 +381,39 @@ class ManageDoctor extends React.Component {
                         />
                     </div>
                 </div>
+                <div className="row">
+                    <div className="col-4 form-group">
+                        <label>
+                            <FormattedMessage id="admin.manage-doctor.specialty" />
+                        </label>
+                        <Select
+                            value={this.state.selectedSpecialty}
+                            options={this.state.listSpecialty}
+                            placeholder={
+                                <FormattedMessage id="admin.manage-doctor.specialty" />
+                            }
+                            onChange={this.handleOnChangeSelectDoctorInfo}
+                            name="selectedSpecialty"
+                        />
+                    </div>
+                    <div className="col-4 form-group">
+                        <label>
+                            <FormattedMessage id="admin.manage-doctor.clinic" />
+                        </label>
+                        <Select
+                            value={this.state.selectedClinic}
+                            options={this.state.listClinic}
+                            placeholder={
+                                <FormattedMessage id="admin.manage-doctor.clinic" />
+                            }
+                            onChange={this.handleOnChangeSelectDoctorInfo}
+                            name="selectedClinic"
+                        />
+                    </div>
+                </div>
                 <div className="manage-doctor-editor">
                     <MdEditor
-                        style={{ height: "500px" }}
+                        style={{ height: "300px" }}
                         renderHTML={(text) => mdParser.render(text)}
                         onChange={this.handleEditorChange}
                         value={this.state.contentMarkdown}
