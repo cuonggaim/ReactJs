@@ -7,6 +7,7 @@ import { LANGUAGES } from "../../../utils";
 import NumberFormat from "react-number-format";
 import _ from "lodash";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 class ProfileDoctor extends Component {
     constructor(props) {
@@ -73,7 +74,14 @@ class ProfileDoctor extends Component {
 
     render() {
         let { dataProfile } = this.state;
-        let { language, isShowDescriptionDoctor, dataTime } = this.props;
+        let {
+            language,
+            isShowDescriptionDoctor,
+            dataTime,
+            isShowPrice,
+            isShowLinkDetail,
+            doctorId,
+        } = this.props;
 
         let nameVi = "",
             nameEn = "";
@@ -120,37 +128,44 @@ class ProfileDoctor extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="price">
-                    <FormattedMessage id="patient.booking-modal.price" />
-                    {dataProfile &&
-                        dataProfile.Doctor_Info &&
-                        language === LANGUAGES.VI && (
-                            <NumberFormat
-                                className="currency"
-                                value={
-                                    dataProfile.Doctor_Info.priceTypeData
-                                        .valueVi
-                                }
-                                displayType={"text"}
-                                thousandSeparator={true}
-                                suffix={" VNĐ "}
-                            />
-                        )}
-                    {dataProfile &&
-                        dataProfile.Doctor_Info &&
-                        language === LANGUAGES.EN && (
-                            <NumberFormat
-                                className="currency"
-                                value={
-                                    dataProfile.Doctor_Info.priceTypeData
-                                        .valueEn
-                                }
-                                displayType={"text"}
-                                thousandSeparator={true}
-                                suffix={" $ "}
-                            />
-                        )}
-                </div>
+                {isShowLinkDetail === true && (
+                    <div className="view-detail-doctor">
+                        <Link to={`/detail-doctor/${doctorId}`}>Xem thêm</Link>
+                    </div>
+                )}
+                {isShowPrice === true && (
+                    <div className="price">
+                        <FormattedMessage id="patient.booking-modal.price" />
+                        {dataProfile &&
+                            dataProfile.Doctor_Info &&
+                            language === LANGUAGES.VI && (
+                                <NumberFormat
+                                    className="currency"
+                                    value={
+                                        dataProfile.Doctor_Info.priceTypeData
+                                            .valueVi
+                                    }
+                                    displayType={"text"}
+                                    thousandSeparator={true}
+                                    suffix={" VNĐ "}
+                                />
+                            )}
+                        {dataProfile &&
+                            dataProfile.Doctor_Info &&
+                            language === LANGUAGES.EN && (
+                                <NumberFormat
+                                    className="currency"
+                                    value={
+                                        dataProfile.Doctor_Info.priceTypeData
+                                            .valueEn
+                                    }
+                                    displayType={"text"}
+                                    thousandSeparator={true}
+                                    suffix={" $ "}
+                                />
+                            )}
+                    </div>
+                )}
             </div>
         );
     }
