@@ -94,6 +94,14 @@ class ManageDoctor extends React.Component {
                     result.push(object);
                 });
             }
+            if (type === "CLINIC") {
+                inputData.map((item, index) => {
+                    let object = {};
+                    object.label = item.name;
+                    object.value = item.id;
+                    result.push(object);
+                });
+            }
         }
         return result;
     };
@@ -111,7 +119,7 @@ class ManageDoctor extends React.Component {
         if (
             prevProps.allRequiredDoctorInfo !== this.props.allRequiredDoctorInfo
         ) {
-            let { resPayment, resPrice, resProvince, resSpecialty } =
+            let { resPayment, resPrice, resProvince, resSpecialty, resClinic } =
                 this.props.allRequiredDoctorInfo;
 
             let dataSelectPrice = this.buildDataInputSelect(resPrice, "PRICE");
@@ -127,12 +135,17 @@ class ManageDoctor extends React.Component {
                 resSpecialty,
                 "SPECIALTY"
             );
+            let dataSelectClinic = this.buildDataInputSelect(
+                resClinic,
+                "CLINIC"
+            );
 
             this.setState({
                 listPrice: dataSelectPrice,
                 listPayment: dataSelectPayment,
                 listProvince: dataSelectProvince,
                 listSpecialty: dataSelectSpecialty,
+                listClinic: dataSelectClinic,
             });
         }
         if (prevProps.language !== this.props.language) {
@@ -193,8 +206,13 @@ class ManageDoctor extends React.Component {
 
     handleChangeSelect = async (selectedOption) => {
         this.setState({ selectedOption });
-        let { listPayment, listPrice, listProvince, listSpecialty } =
-            this.state;
+        let {
+            listPayment,
+            listPrice,
+            listProvince,
+            listSpecialty,
+            listClinic,
+        } = this.state;
 
         let res = await getDetailInfoDoctor(selectedOption.value);
         if (res && res.errCode === 0 && res.data && res.data.Markdown) {
@@ -206,10 +224,12 @@ class ManageDoctor extends React.Component {
                 priceId = "",
                 provinceId = "",
                 specialtyId = "",
+                clinicId = "",
                 selectedPrice = "",
                 selectedPayment = "",
                 selectedProvince = "",
-                selectedSpecialty = "";
+                selectedSpecialty = "",
+                selectedClinic = "";
             if (res.data.Doctor_Info) {
                 addressClinic = res.data.Doctor_Info.addressClinic;
                 nameClinic = res.data.Doctor_Info.nameClinic;
@@ -218,6 +238,7 @@ class ManageDoctor extends React.Component {
                 priceId = res.data.Doctor_Info.priceId;
                 provinceId = res.data.Doctor_Info.provinceId;
                 specialtyId = res.data.Doctor_Info.specialtyId;
+                clinicId = res.data.Doctor_Info.clinicId;
 
                 selectedPayment = listPayment.find((item) => {
                     return item && item.value === paymentId;
@@ -230,6 +251,9 @@ class ManageDoctor extends React.Component {
                 });
                 selectedSpecialty = listSpecialty.find((item) => {
                     return item && item.value === specialtyId;
+                });
+                selectedClinic = listClinic.find((item) => {
+                    return item && item.value === clinicId;
                 });
             }
             this.setState({
@@ -244,6 +268,7 @@ class ManageDoctor extends React.Component {
                 selectedPrice: selectedPrice,
                 selectedProvince: selectedProvince,
                 selectedSpecialty: selectedSpecialty,
+                selectedClinic: selectedClinic,
             });
         } else {
             this.setState({
@@ -258,6 +283,7 @@ class ManageDoctor extends React.Component {
                 selectedPrice: "",
                 selectedProvince: "",
                 selectedSpecialty: "",
+                selectedClinic: "",
             });
         }
     };
